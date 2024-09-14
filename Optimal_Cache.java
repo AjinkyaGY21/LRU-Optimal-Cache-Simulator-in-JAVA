@@ -1,10 +1,10 @@
 import java.util.HashSet;
 
-class Optimal_Cache {
+public class Optimal_Cache {
     public void optimalPage(int[] arr, int n, int capacity) {
         HashSet<Integer> cache = new HashSet<>(capacity);
         int hits = 0, misses = 0;
-
+        
         for (int i = 0; i < n; i++) {
             if (cache.contains(arr[i])) {
                 System.out.println("HIT");
@@ -21,13 +21,14 @@ class Optimal_Cache {
                 }
             }
         }
-
+        
         System.out.println("Total Hits: " + hits);
         System.out.println("Total Misses: " + misses);
     }
-
+    
     private int findOptimalRemoveIndex(HashSet<Integer> cache, int[] arr, int currIndex, int n) {
-        int farthest = currIndex, indexToRemove = -1;
+        int farthest = currIndex;
+        int indexToRemove = -1;
         for (int item : cache) {
             int nextOccurrence = findNextOccurrence(arr, item, currIndex + 1, n);
             if (nextOccurrence == -1) return item;
@@ -38,7 +39,7 @@ class Optimal_Cache {
         }
         return indexToRemove;
     }
-
+    
     private int findNextOccurrence(int[] arr, int item, int start, int end) {
         for (int i = start; i < end; i++) {
             if (arr[i] == item) return i;

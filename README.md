@@ -1,45 +1,25 @@
-# LRU Optimal Cache Simulator
+# LRU & Optimal Cache Simulator 🌟
 
-## 
+## Overview
 
-### This project implements an LRU (Least Recently Used) Optimal Cache Simulator. It simulates cache access based on a given sequence of cache operations and outputs the result as HIT/MISS along with the total number of hits and misses
+This project implements a **Least Recently Used (LRU)** and **Optimal Cache Simulator**. It simulates cache operations based on a sequence of inputs and outputs whether each operation is a **HIT** or a **MISS**, along with the total count of hits and misses.
 
-</br>
+---
 
 ## Features
 
-</br>
+- 💻 **Simulates** both **LRU** and **Optimal** cache strategies.
+- 📊 **Tracks** cache **hits** and **misses** for each operation.
+- 📈 **Displays** the final total of hits and misses after all operations.
+- ⚡ Optimized for performance with **O(1)** hit detection using a **Node-based structure** for the LRU cache.
 
-### 1.Simulates an LRU and Optimal cache based on a given sequence of cache operations
-
-</br>
-
-### 2.Determines cache hits and misses for each operation
-
-</br>
-
-### 3.Provides the total count of cache hits and misses
-
-</br>
+---
 
 ## Usage
 
-</br>
+1. Make sure the necessary dependencies are installed (Java environment).
+2. Run the program and provide the sequence of cache operations.
+3. The simulator will process each operation, displaying **HIT** or **MISS**.
+4. View the total number of **cache hits** and **misses** after the simulation.
 
-### 1.Ensure you have the necessary dependencies and prerequisites installed (if applicable)
-
-</br>
-
-### 2.Run the project by executing the main program
-
-</br>
-
-### 3.Provide the input sequence of cache operations
-
-</br>
-
-### 4.The simulator will process each cache operation and determine whether it results in a HIT or a MISS
-
-</br>
-
-### 5.The simulator will display the result of each operation (HIT/MISS) along with the total number of hits and misses finally
+---

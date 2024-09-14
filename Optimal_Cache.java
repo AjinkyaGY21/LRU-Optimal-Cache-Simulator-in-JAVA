@@ -1,49 +1,58 @@
-import java.util.HashSet;
+import java.util.ArrayList;
 
 public class Optimal_Cache {
-    public void optimalPage(int[] arr, int n, int capacity) {
-        HashSet<Integer> cache = new HashSet<>(capacity);
-        int hits = 0, misses = 0;
-        
-        for (int i = 0; i < n; i++) {
-            if (cache.contains(arr[i])) {
-                System.out.println("HIT");
+    //we need to know the access sequence first for optimal policy
+    public void optimalPage(int[] pg, int pn, int fn) {
+        ArrayList<Integer> frames = new ArrayList<>(fn);
+        int hits = 0;
+        int misses = 0;
+
+        for (int i = 0; i < pn; i++) {
+            int page = pg[i];
+            if (frames.contains(page)){
+                System.out.println("Access "+ page +" : HIT");
                 hits++;
-            } else {
-                System.out.println("MISS");
-                misses++;
-                if (cache.size() < capacity) {
-                    cache.add(arr[i]);
+            }else {
+                if (frames.size() < fn) {
+                    frames.add(page);
                 } else {
-                    int optimalRemoveIndex = findOptimalRemoveIndex(cache, arr, i, n);
-                    cache.remove(arr[optimalRemoveIndex]);
-                    cache.add(arr[i]);
+                    int index = getOptimalIndex(pg, i, frames);
+                    frames.set(index, page);
                 }
+                System.out.println("Access "+ page +" : MISS");
+                misses++;
             }
         }
-        
+        System.out.println();
         System.out.println("Total Hits: " + hits);
         System.out.println("Total Misses: " + misses);
     }
-    
-    private int findOptimalRemoveIndex(HashSet<Integer> cache, int[] arr, int currIndex, int n) {
-        int farthest = currIndex;
-        int indexToRemove = -1;
-        for (int item : cache) {
-            int nextOccurrence = findNextOccurrence(arr, item, currIndex + 1, n);
-            if (nextOccurrence == -1) return item;
+
+    private static int getOptimalIndex(int[] pg, int start, ArrayList<Integer> frames) {
+        int index = -1;
+        int farthest = -1;
+
+        for (int i = 0; i < frames.size(); i++) {
+            int frame = frames.get(i);
+            int nextOccurrence = getNextOccurrence(pg, start, frame);
+            if (nextOccurrence == -1) {
+                return i;
+            }
             if (nextOccurrence > farthest) {
                 farthest = nextOccurrence;
-                indexToRemove = item;
+                index = i;
             }
         }
-        return indexToRemove;
+
+        return index;
     }
-    
-    private int findNextOccurrence(int[] arr, int item, int start, int end) {
-        for (int i = start; i < end; i++) {
-            if (arr[i] == item) return i;
+
+    private static int getNextOccurrence(int[] pg, int start, int frame) {
+        for (int i = start + 1; i < pg.length; i++) {
+            if (pg[i] == frame) {
+                return i;
+            }
         }
-        return -1;
+        return Integer.MAX_VALUE;
     }
 }

@@ -9,19 +9,21 @@ class Node {
     }
 }
 
-class LRU_Cache {
+public class LRU_Cache {
     private int capacity;
     private HashMap<Integer, Node> cache;
     private Node head, tail;
     private int hits, misses;
-
+    
     public LRU_Cache(int capacity) {
         this.capacity = capacity;
         this.cache = new HashMap<>();
         this.hits = 0;
         this.misses = 0;
+        this.head = null;
+        this.tail = null;
     }
-
+    
     public void lruPage(int[] arr) {
         for (int page : arr) {
             if (cache.containsKey(page)) {
@@ -40,12 +42,13 @@ class LRU_Cache {
         System.out.println("Total Hits: " + hits);
         System.out.println("Total Misses: " + misses);
     }
-
+    
     private void moveToHead(Node node) {
+        if (node == head) return;
         removeNode(node);
         addNodeToHead(node);
     }
-
+    
     private void addToCache(Node newNode) {
         if (cache.size() >= capacity) {
             // Remove least recently used node
@@ -55,19 +58,19 @@ class LRU_Cache {
         addNodeToHead(newNode);
         cache.put(newNode.key, newNode);
     }
-
+    
     private void removeNode(Node node) {
         if (node.prev != null) node.prev.next = node.next;
         if (node.next != null) node.next.prev = node.prev;
-        if (node == head) head = head.next;
-        if (node == tail) tail = tail.prev;
+        if (node == head) head = node.next;
+        if (node == tail) tail = node.prev;
     }
-
+    
     private void addNodeToHead(Node node) {
-        node.prev = null;
         node.next = head;
+        node.prev = null;
         if (head != null) head.prev = node;
         head = node;
-        if (tail == null) tail = head;
+        if (tail == null) tail = node;
     }
 }

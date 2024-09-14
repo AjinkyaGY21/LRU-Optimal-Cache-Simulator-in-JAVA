@@ -1,42 +1,73 @@
-import java.util.ArrayDeque;
+import java.util.HashMap;
 
-public class LRU_Cache {
+class Node {
+    int key;
+    Node prev, next;
+    
+    Node(int key) {
+        this.key = key;
+    }
+}
+
+class LRU_Cache {
     private int capacity;
-    private ArrayDeque<Integer> cache;
+    private HashMap<Integer, Node> cache;
+    private Node head, tail;
+    private int hits, misses;
 
     public LRU_Cache(int capacity) {
-        this.cache = new ArrayDeque<>(this.capacity);
+        this.capacity = capacity;
+        this.cache = new HashMap<>();
+        this.hits = 0;
+        this.misses = 0;
     }
 
-    public void lruPage(int[] arr, int capacity) {
-        int hits = 0;
-        int misses = 0;
-
+    public void lruPage(int[] arr) {
         for (int page : arr) {
-            if (cache.contains(page)) {
-                // Page is already in the cache (HIT)
+            if (cache.containsKey(page)) {
+                // Page is already in cache - HIT
                 System.out.println("HIT");
                 hits++;
-                cache.remove(page); // Remove the page from its current position
+                moveToHead(cache.get(page));
             } else {
-                // Page is not in the cache (MISS)
+                // Page is not in cache - MISS
                 System.out.println("MISS");
                 misses++;
-                if (cache.size() >= capacity) {
-                    // Remove the least recently used page from the cache
-                    cache.removeLast();
-                }
+                Node newNode = new Node(page);
+                addToCache(newNode);
             }
-
-            // Add the current page to the front of the cache
-            cache.addFirst(page);
         }
-
         System.out.println("Total Hits: " + hits);
         System.out.println("Total Misses: " + misses);
     }
 
-    public boolean isHit(int key) {
-        return cache.contains(key);
+    private void moveToHead(Node node) {
+        removeNode(node);
+        addNodeToHead(node);
+    }
+
+    private void addToCache(Node newNode) {
+        if (cache.size() >= capacity) {
+            // Remove least recently used node
+            cache.remove(tail.key);
+            removeNode(tail);
+        }
+        addNodeToHead(newNode);
+        cache.put(newNode.key, newNode);
+    }
+
+    private void removeNode(Node node) {
+        if (node.prev != null) node.prev.next = node.next;
+        if (node.next != null) node.next.prev = node.prev;
+        if (node == head) head = head.next;
+        if (node == tail) tail = tail.prev;
+    }
+
+    private void addNodeToHead(Node node) {
+        node.prev = null;
+        node.next = head;
+        if (head != null) head.prev = node;
+        head = node;
+        if (tail == null) tail = head;
     }
 }
